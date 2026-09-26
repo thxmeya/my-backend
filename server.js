@@ -23,7 +23,7 @@ app.use(express.json());
 
 // Route: Home
 app.get('/', (req, res) => {
-  res.send('Welcome to My Backend Server!');
+  res.send('Welcome to My Updated Backend Server!');
 });
 
 // Route: API Example
