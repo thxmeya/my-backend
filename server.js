@@ -31,7 +31,6 @@ app.get('/api/user', (req, res) => {
   res.json({ name: "John Doe", email: "john@example.com" });
 });
 
-// Route: Contact (without database for cloud)
 app.post('/api/contact', (req, res) => {
   const { name, email, message } = req.body;
   
