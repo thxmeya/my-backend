@@ -1,23 +1,24 @@
 const express = require('express');
-const mysql = require('mysql2');  // ← NEW
+// const mysql = require('mysql2'); // Commented out for deployment
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Database connection commented out for Render deployment
+/*
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '12345',
+  password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'my_database'
 });
 
-// Connect to database (NEW)
 db.connect((err) => {
   if (err) throw err;
   console.log("Connected to MySQL Database!");
 });
+*/
 
-// Middleware to parse JSON request bodies
 app.use(express.json());
 
 // Route: Home
@@ -30,6 +31,7 @@ app.get('/api/user', (req, res) => {
   res.json({ name: "John Doe", email: "john@example.com" });
 });
 
+// Route: Contact (without database for cloud)
 app.post('/api/contact', (req, res) => {
   const { name, email, message } = req.body;
   
@@ -37,17 +39,13 @@ app.post('/api/contact', (req, res) => {
     return res.status(400).json({ error: "Invalid email address" });
   }
   
-  const sql = "INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)";
-  db.query(sql, [name, email, message], (err, result) => {
-    if (err) throw err;
-    res.json({
-      message: `Thank you ${name}, your message has been saved!`,
-      data: { id: result.insertId, name, email, message }
-    });
+  res.json({
+    message: `Thank you ${name}, we received your message!`,
+    data: { name, email, message }
   });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
